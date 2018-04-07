@@ -1,8 +1,8 @@
 # create_courses.py
-# CSC 370 - Spring 2018 - Starter code for Assignment 4
+# CSC 370 - Spring 2018
 #
-#
-# B. Bird - 02/26/2018
+# Matt Stewart V00218956
+# Based on starter code by B. Bird - 02/26/2018
 
 import sys, csv, psycopg2
 
@@ -41,20 +41,17 @@ with open(input_filename) as f:
 		#Make sure to catch any exceptions that occur and roll back the transaction if a database error occurs.
 		try:
 			insert_statement = cursor.mogrify("""start transaction;
-								set constraints all deferred;
-								if (select count(*) from courses where course_code = %s) = 0
-								then
-									insert into courses values(%s);
-								end if;
+								insert into courses values(%s);
 								insert into course_offerings values(%s,%s,%s,0,%s,%s);
-								commit;""",(code,code,code,name,term,capacity,instructor))
+								commit;""",(code,code,name,term,capacity,instructor))
 			cursor.execute(insert_statement)
+			
 			for prereq in prerequisites:
 				insert_statement = cursor.mogrify("""start transaction;
-									set constraints all deferred;
-									insert into prerequisites values(%s,%s);
-									commit;""",(code,prereq))
+									insert into prerequisites values(%s,%s,%s);
+									commit;""",(code,term,prereq))
 				cursor.execute(insert_statement)
+			
 		except Exception as err:
 			print("Error:",file=sys.stderr)
 			print(err,file=sys.stderr)

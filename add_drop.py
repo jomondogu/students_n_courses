@@ -1,8 +1,8 @@
 # add_drop.py
-# CSC 370 - Spring 2018 - Starter code for Assignment 4
+# CSC 370 - Spring 2018
 #
-#
-# B. Bird - 02/26/2018
+# Matt Stewart V00218956
+# Based on starter code by B. Bird - 02/26/2018
 
 import sys, csv, psycopg2
 
@@ -41,19 +41,18 @@ with open(input_filename) as f:
 		try:
 			if add_or_drop == 'ADD':
 				insert_statement = cursor.mogrify("""start transaction;
-									set constraints all deferred;
 									insert into students values(%s,%s);
-									insert into enrollment values(%s,%s,%s,NULL);
-									update course_offerings set total_enrollment = total_enrollment + 1;
-									commit;""",(student_id,student_name,student_ID,course_code,term))
+									insert into enrollment values(%s,%s,%s,%s,NULL);
+									update course_offerings set total_enrollment = total_enrollment + 1 where course_code = %s and term_code = %s;
+									commit;""",(student_id,student_name,student_id,student_name,course_code,term,course_code,term))
 				cursor.execute(insert_statement)
-			else if add_or_drop == 'DROP':
+			elif add_or_drop == 'DROP':
 				insert_statement = cursor.mogrify("""start transaction;
-									set constraints all deferred;
-									delete from enrollment
-									where student_ID = %s;
-									update course_offerings set total_enrollment = total_enrollment - 1;
-									commit;""",(student_id))
+				delete from enrollment
+				  where student_ID = %s and course_code = %s and term_code = %s;
+				update course_offerings set total_enrollment = total_enrollment - 1 
+				  where course_code = %s and term_code = %s;
+				commit;""",(student_id, course_code, term, course_code, term))
 				cursor.execute(insert_statement)
 			else:
 				raise Exception

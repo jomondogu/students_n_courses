@@ -1,8 +1,8 @@
 # assign_grades.py
-# CSC 370 - Spring 2018 - Starter code for Assignment 4
+# CSC 370 - Spring 2018
 #
-#
-# B. Bird - 02/26/2018
+# Matt Stewart V00218956
+# Based on starter code by B. Bird - 02/26/2018
 
 import sys, csv, psycopg2
 
@@ -40,10 +40,9 @@ with open(input_filename) as f:
 		#Make sure to catch any exceptions that occur and roll back the transaction if a database error occurs.
 		try:
 			insert_statement = cursor.mogrify("""start transaction;
-								set constraints all deferred;
 								update enrollment set grade = %s
-								where course_code = %s and student_ID = %s;
-								commit;""", (grade, course_code, student_id))
+								where course_code = %s and term_code = %s and student_ID = %s;
+								commit;""", (grade, course_code, term, student_id))
 			cursor.execute(insert_statement)
 		except Exception as err:
 			print("Error:",file=sys.stderr)

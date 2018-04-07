@@ -1,11 +1,8 @@
 # report_classlist.py
-# CSC 370 - Spring 2018 - Starter code for Assignment 4
+# CSC 370 - Spring 2018
 #
-# The code below generates a mockup of the output of report_classlist.py
-# as specified in the assignment. You can copy and paste the functions in this
-# program into your solution to ensure the correct formatting.
-#
-# B. Bird - 02/26/2018
+# Matt Stewart V00218956
+# Based on starter code by B. Bird - 02/26/2018
 
 import psycopg2, sys
 

@@ -1,11 +1,8 @@
 # report_enrollment.py
-# CSC 370 - Spring 2018 - Starter code for Assignment 4
+# CSC 370 - Spring 2018
 #
-# The code below generates a mockup of the output of report_enrollment.py
-# as specified in the assignment. You can copy and paste the functions in this
-# program into your solution to ensure the correct formatting.
-#
-# B. Bird - 02/26/2018
+# Matt Stewart V00218956
+# Based on starter code by B. Bird - 02/26/2018
 
 import psycopg2, sys
 
@@ -27,7 +24,7 @@ cursor = conn.cursor()
 #The .execute method sends one or more SQL statements to the server.
 
 cursor.execute("""select term_code, course_code, course_name, instructor_name, total_enrollment, maximum_capacity from course_offerings
-					  order by term_code;
+					  order by term_code, course_code;
 			   """ )
 
 while True:
